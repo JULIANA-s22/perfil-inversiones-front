@@ -1,0 +1,122 @@
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.sidebar {
+  width: 220px;
+  background: #0b1a30;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1.8rem 1.2rem;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  margin-bottom: 2.5rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  color: #8a9bb4;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.sidebar-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-link.active {
+  color: #c9b87c;
+  background: rgba(201, 184, 124, 0.12);
+}
+
+.dashboard-main {
+  flex: 1;
+  background: #f4f5f7;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2.5rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-right: 0.5rem;
+}
+
+.header-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0b1a30;
+  color: #c9b87c;
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.header-nombre {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0b1a30;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-btn {
+  background: none;
+  border: none;
+  color: #3a4a5c;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.header-btn:hover {
+  background: #e2e5ea;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 0 2.5rem 2.5rem;
+  overflow-y: auto;
+}

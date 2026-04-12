@@ -49,7 +49,7 @@ const Login = () => {
               </svg>
               <input
                 type="email"
-                placeholder="nombre@empresa.com"
+                placeholder="Ingrese su email"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 required

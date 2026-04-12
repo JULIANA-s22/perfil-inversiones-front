@@ -37,7 +37,7 @@ const Registro = () => {
               </svg>
               <input
                 type="text"
-                placeholder="Ej. Juan Pérez"
+                placeholder="Ingrese su nombre completo"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 required
@@ -52,7 +52,7 @@ const Registro = () => {
               </svg>
               <input
                 type="email"
-                placeholder="nombre@empresa.com"
+                placeholder="Ingrese su email"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 required

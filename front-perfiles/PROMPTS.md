@@ -6,8 +6,6 @@ Colección de prompts estructurados para las funcionalidades principales del pro
 
 ## [1] Landing Page - Diseño Fintech Premium
 
-**Status**: [HECHO] Implementado
-
 > Estoy diseñando una landing page para mi proyecto de simulación de pensiones voluntarias "Proyección". Quiero un hero con CTA hacia /registro, una sección explicativa del valor de la plataforma, tarjetas para las dos funcionalidades principales (calculadora y chatbot IA), y una barra de estadísticas al fondo. Estoy usando navy #0b1a30 y champagne #c9b87c como paleta. ¿Cómo quedaría bien estructurado en React + TypeScript con CSS puro? Necesito que sea responsivo y tipo fintech elegante.
 
 **Tecnologías**: React + TypeScript + CSS Puro  

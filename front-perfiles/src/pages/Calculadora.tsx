@@ -1,9 +1,9 @@
 import { useState, useRef, type FormEvent } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { simulacionService, type SimulacionResponse } from '../services/api';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import './Calculadora.css';
+import { simulacionService, almacenamientoService, type SimulacionResponse } from '../services/api';
 
 const formatCOP = (n: number) =>
   new Intl.NumberFormat('es-CO', { style: 'decimal', maximumFractionDigits: 0 }).format(n);
@@ -41,42 +41,70 @@ const Calculadora = () => {
     }
   };
 
-  const exportarPDF = async () => {
-    if (!pdfRef.current || !resultado) return;
-    setExportando(true);
-    try {
-      const canvas = await html2canvas(pdfRef.current, {
-        scale: 2,
-        backgroundColor: '#f4f5f7',
-        useCORS: true,
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('l', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      const pageHeight = pdf.internal.pageSize.getHeight();
+const exportarPDF = async () => {
+  if (!pdfRef.current || !resultado) return;
+  setExportando(true);
+  try {
+    const pdf = new jsPDF('l', 'mm', 'a4');
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 10;
+    const usableW = pageW - margin * 2;
 
-      if (pdfHeight > pageHeight) {
-        let position = 0;
-        let page = 0;
-        while (position < pdfHeight) {
-          if (page > 0) pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, -position, pdfWidth, pdfHeight);
-          position += pageHeight;
-          page++;
-        }
-      } else {
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    const opciones = {
+      scale: 2,
+      backgroundColor: '#f4f5f7',
+      useCORS: true,
+    };
+
+  
+    const secciones = pdfRef.current.querySelectorAll<HTMLElement>(
+      '.perfiles-row, .chart-container'
+    );
+
+    pdf.setFontSize(20);
+    pdf.setTextColor(30, 41, 59);
+    pdf.text('Simulación de Inversión', margin, 20);
+    pdf.setFontSize(12);
+    pdf.setTextColor(122, 138, 156);
+    pdf.text(
+      `Capital: $${formatCOP(Number(capital.replace(/\./g, '')))} | Aporte mensual: $${formatCOP(Number(aporte.replace(/\./g, '')))} | Horizonte: ${anios} años`,
+      margin, 28
+    );
+    pdf.text(`Perfil seleccionado: ${perfilActivo.toUpperCase()}`, margin, 35);
+
+    let cursorY = 42;
+
+    for (let i = 0; i < secciones.length; i++) {
+      const canvas = await html2canvas(secciones[i], opciones);
+      const imgData = canvas.toDataURL('image/png');
+      const imgH = (canvas.height * usableW) / canvas.width;
+
+    
+      if (cursorY + imgH > pageH - margin) {
+        pdf.addPage();
+        cursorY = margin;
       }
 
-      pdf.save(`simulacion-${perfilActivo}-${anios}anios.pdf`);
-    } catch (err: any) {
-      console.error('PDF error:', err);
-      setError('Error al exportar el PDF');
-    } finally {
-      setExportando(false);
+      pdf.addImage(imgData, 'PNG', margin, cursorY, usableW, imgH);
+      cursorY += imgH + 8;
     }
-  };
+
+    const nombreArchivo = `simulacion-${perfilActivo}-${anios}anios-${Date.now()}.pdf`;
+
+  
+    const { url } = await almacenamientoService.obtenerUrlSubida(nombreArchivo);
+    const pdfBlob = pdf.output('blob');
+    await almacenamientoService.subirArchivo(url, pdfBlob);
+
+    pdf.save(nombreArchivo);
+  } catch (err: any) {
+    console.error('PDF error:', err);
+    setError('Error al exportar el PDF');
+  } finally {
+    setExportando(false);
+  }
+};
 
   const enviarAlCorreo = async () => {
     if (!resultado) return;

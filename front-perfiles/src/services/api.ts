@@ -115,6 +115,21 @@ export interface MensajeDto {
   enviadoEn: string;
 }
 
+export const almacenamientoService = {
+  obtenerUrlSubida: async (nombreArchivo: string): Promise<{ url: string; key: string }> => {
+    const response = await api.post(
+      `/api/almacenamiento/presigned-url?nombreArchivo=${encodeURIComponent(nombreArchivo)}&tipoContenido=application/pdf`
+    );
+    return response.data;
+  },
+
+  subirArchivo: async (urlPresignada: string, archivo: Blob) => {
+    await axios.put(urlPresignada, archivo, {
+      headers: { 'Content-Type': 'application/pdf' },
+    });
+  },
+};
+
 export const chatbotService = {
   iniciarChat: async (usuarioId: string): Promise<ConversacionDto> => {
     const response = await api.post('/api/chatbot/conversaciones/chat', { usuarioId });
